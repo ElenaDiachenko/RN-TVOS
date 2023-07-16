@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "388288361120",
+    "project_id": "reflex-47bad",
+    "storage_bucket": "reflex-47bad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388288361120:android:8987b15be69272fafd0fc5",
+        "android_client_info": {
+          "package_name": "com.academy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388288361120-nl970a7hq1ge47vmoa0f18lqjlb6lmlb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsEHDGOL662B9RATYoxzlnR_o51UyGIO4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388288361120-nl970a7hq1ge47vmoa0f18lqjlb6lmlb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -26,7 +26,7 @@ export type MovieSlice = {
 
 export const initialState = {
   page: 1,
-  limit: 12,
+  limit: 10,
   query: '',
   sort: 'rating',
   order: '1',

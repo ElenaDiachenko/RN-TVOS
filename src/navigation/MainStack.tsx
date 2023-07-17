@@ -33,7 +33,7 @@ const appStackNavigatorProps: Omit<
 > = {
   initialRouteName: 'Home',
   screenOptions: {
-    // headerShown: false,
+    headerShown: false,
 
     headerTitleStyle: {
       fontSize: 24,

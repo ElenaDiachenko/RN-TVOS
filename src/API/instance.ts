@@ -1,8 +1,8 @@
 import axios from 'axios';
-import {REACT_APP_API_URL} from '@env';
+// import {REACT_APP_API_URL} from '@env';
 import {getTokenFromAsyncStorage} from '../utils';
 
-// const API_URL = 'http://10.0.2.2:4200/api';
+const REACT_APP_API_URL = 'http://10.0.2.2:4200/api';
 
 const $api = axios.create({
   baseURL: REACT_APP_API_URL,

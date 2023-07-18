@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {shallow} from 'zustand/shallow';
-import {useTVEventHandler, StyleSheet} from 'react-native';
+import {useTVEventHandler} from 'react-native';
 import {enableScreens} from 'react-native-screens';
 import {useStore} from './src/stores/store';
 import Navigation from './src/navigation';

@@ -5,3 +5,4 @@ export {default as SearchButton} from './SearchButton';
 export {default as Pagination} from './Pagination';
 export {default as AuthInput} from './AuthInput';
 export {default as Loader} from './Loader';
+export {default as CustomHeader} from './CustomHeader';

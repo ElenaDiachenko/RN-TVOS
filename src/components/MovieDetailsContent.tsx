@@ -28,6 +28,7 @@ import {useOrientation} from '../hooks';
 import {AppStackParamList} from '../navigation/types';
 import {Loader} from './ui';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigationState} from '@react-navigation/native';
 
 type MoviePropsType = {
   movieId: string;
@@ -36,6 +37,9 @@ type MoviePropsType = {
 
 const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
   const {isPortrait, width, height} = useOrientation();
+  const routes = useNavigationState(state => state.routes);
+  const prevRoute = routes[0].name;
+
   // const queryClient = useQueryClient();
   const {searchParameters, setSearchParameters, user} = useStore(
     state => ({
@@ -45,7 +49,7 @@ const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
     }),
     shallow,
   );
-  const prevRoute = 'MainHome';
+
   const serializedSearchParameters =
     getSerializedSearchParameters(searchParameters);
   const {data: movie, isLoading} = useQuery(['movies', movieId], () =>
@@ -95,7 +99,7 @@ const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
   // });
 
   // const toggleMovie = (movie: Movie) => {
-  //   prevRoute === 'MainHome'
+  //   prevRoute === 'Home'
   //     ? addMovieMutation.mutate(movie._id)
   //     : deleteMovieMutation.mutate(movie._id);
   // };
@@ -107,7 +111,7 @@ const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
   };
 
   const infoContainerStyle = {
-    width: isPortrait ? '100%' : '70%',
+    width: isPortrait ? '100%' : '65%',
     paddingHorizontal: isPortrait ? 16 : 0,
   };
 
@@ -148,7 +152,7 @@ const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
                     : styles.iconBoxCenteredLand),
                   right: 10,
                 }}>
-                {prevRoute === 'MainHome' ? (
+                {prevRoute === 'Home' ? (
                   <Octicons
                     name="heart"
                     size={isPortrait ? 26 : 20}

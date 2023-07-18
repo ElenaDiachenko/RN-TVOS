@@ -1,5 +1,5 @@
-import React, {FC, useState, useEffect} from 'react';
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {FC, useState} from 'react';
+import {FlatList, StyleSheet, Text, View, TVFocusGuideView} from 'react-native';
 import {UseMovieQueryType} from '../hooks/useMovieQuery';
 import {movieRequests, libraryRequests} from '../API';
 import {UseLibraryQueryType} from '../hooks/useLibraryQuery';
@@ -10,9 +10,6 @@ import {commonStyles, palette} from '../styles';
 import {useOrientation} from '../hooks';
 import {Pagination, Loader} from './ui';
 
-import {AppStackScreenProps} from '../navigation/types';
-import {useNavigation} from '@react-navigation/native';
-
 type GalleryPropType = {
   movieHandler: UseMovieQueryType | UseLibraryQueryType;
   fetchData: movieRequests.FetchMoviesType | libraryRequests.FetchMoviesType;
@@ -21,9 +18,9 @@ type GalleryPropType = {
 const renderMovieCard = ({item}: {item: Movie}) => <MovieCard movie={item} />;
 
 const MovieGallery: FC<GalleryPropType> = ({movieHandler, fetchData}) => {
-  const navigation = useNavigation<AppStackScreenProps<'Home'>['navigation']>();
   const {isPortrait, width, height} = useOrientation();
-  const [numCols] = useState(6);
+  const [numCols] = useState(5);
+
   const {
     data,
     isLoading,
@@ -42,15 +39,9 @@ const MovieGallery: FC<GalleryPropType> = ({movieHandler, fetchData}) => {
 
   return (
     <View style={styles.gallery}>
-      <View>
+      <TVFocusGuideView autoFocus trapFocusDown>
         <FlatList
-          ListHeaderComponent={
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Library')}
-              style={{padding: 10, backgroundColor: 'red', maxWidth: 100}}>
-              <Text>Library</Text>
-            </TouchableOpacity>
-          }
+          // ListHeaderComponent={<ActionSection />}
           ListFooterComponent={
             currentPage && totalPages && totalPages > 1 ? (
               <Pagination
@@ -83,7 +74,7 @@ const MovieGallery: FC<GalleryPropType> = ({movieHandler, fetchData}) => {
             <Text>An error has occurred. Try again later.</Text>
           </View>
         )}
-      </View>
+      </TVFocusGuideView>
     </View>
   );
 };
@@ -98,5 +89,10 @@ const styles = StyleSheet.create({
   innerContainer: {
     alignSelf: 'center',
     marginTop: 10,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)', // Adjust the opacity as needed
+    zIndex: 1, // Set a higher zIndex to make it appear on top of other content
   },
 });

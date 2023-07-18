@@ -39,42 +39,40 @@ const MovieGallery: FC<GalleryPropType> = ({movieHandler, fetchData}) => {
 
   return (
     <View style={styles.gallery}>
-      <TVFocusGuideView autoFocus trapFocusDown>
-        <FlatList
-          // ListHeaderComponent={<ActionSection />}
-          ListFooterComponent={
-            currentPage && totalPages && totalPages > 1 ? (
-              <Pagination
-                limit={6}
-                total={totalPages}
-                paginate={paginate}
-                currentPage={+currentPage}
-                buttonConst={3}
-                contentPerPage={5}
-                siblingCount={1}
-              />
-            ) : null
-          }
-          key={numCols}
-          data={movieData}
-          renderItem={({item}) => renderMovieCard({item})}
-          keyExtractor={item => item._id}
-          numColumns={numCols}
-          ListEmptyComponent={
-            isSuccess && !movieData?.length ? (
-              <View style={styles.innerContainer}>
-                <Text style={commonStyles.text}>Not found</Text>
-              </View>
-            ) : null
-          }
-        />
-        {isLoading && <Loader size={isPortrait ? width / 6 : height / 6} />}
-        {isError && (
-          <View style={styles.innerContainer}>
-            <Text>An error has occurred. Try again later.</Text>
-          </View>
-        )}
-      </TVFocusGuideView>
+      <FlatList
+        // ListHeaderComponent={<ActionSection />}
+        ListFooterComponent={
+          currentPage && totalPages && totalPages > 1 ? (
+            <Pagination
+              limit={6}
+              total={totalPages}
+              paginate={paginate}
+              currentPage={+currentPage}
+              buttonConst={3}
+              contentPerPage={5}
+              siblingCount={1}
+            />
+          ) : null
+        }
+        key={numCols}
+        data={movieData}
+        renderItem={({item}) => renderMovieCard({item})}
+        keyExtractor={item => item._id}
+        numColumns={numCols}
+        ListEmptyComponent={
+          isSuccess && !movieData?.length ? (
+            <View style={styles.innerContainer}>
+              <Text style={commonStyles.text}>Not found</Text>
+            </View>
+          ) : null
+        }
+      />
+      {isLoading && <Loader size={isPortrait ? width / 6 : height / 6} />}
+      {isError && (
+        <View style={styles.innerContainer}>
+          <Text>An error has occurred. Try again later.</Text>
+        </View>
+      )}
     </View>
   );
 };

@@ -1,5 +1,11 @@
 import React, {useState, FC, memo} from 'react';
-import {View, Text, TouchableWithoutFeedback, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableWithoutFeedback,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {constants, convertRating, calculateCardWidth} from '../utils';
@@ -15,66 +21,53 @@ type MovieCardProps = {
 const MovieCard: FC<MovieCardProps> = ({movie}) => {
   const navigation = useNavigation<AppStackScreenProps<'Home'>['navigation']>();
   const {width, isPortrait} = useOrientation();
-  const [isPressed, setIsPressed] = useState(false);
+  const [focus, setFocus] = useState(false);
 
-  const handlePressIn = () => {
-    setIsPressed(true);
+  const handleFocus = () => {
+    setFocus(true);
   };
 
-  const handlePressOut = () => {
-    setIsPressed(false);
+  const handleBlur = () => {
+    setFocus(false);
   };
 
-  const cardWidth = calculateCardWidth(isPortrait, width);
+  const cardWidth: number = calculateCardWidth(isPortrait, width);
 
   return (
-    <TouchableWithoutFeedback
+    <TouchableOpacity
+      style={[styles.card, {width: cardWidth}, focus && styles.cardFocused]}
       onPress={() => navigation.navigate('Details', {movieId: movie._id})}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}>
-      <View
-        style={[
-          styles.card,
-          {width: cardWidth},
-          isPressed && styles.cardPressed,
-        ]}>
-        <FastImage
-          style={styles.cardImage}
-          resizeMode="cover"
-          source={{uri: movie.poster[2]}}
-        />
-        <View style={styles.cardContent}>
-          <View style={styles.movieInfo}>
-            <Text
-              style={styles.cardName}
-              numberOfLines={2}
-              ellipsizeMode="tail">
-              {movie.title}
-            </Text>
-          </View>
-          <Text
-            style={styles.cardGenres}
-            numberOfLines={1}
-            ellipsizeMode="tail">
-            {movie.genres.join(' | ')}
+      activeOpacity={1}
+      onFocus={handleFocus}
+      onBlur={handleBlur}>
+      <FastImage
+        style={styles.cardImage}
+        resizeMode="cover"
+        source={{uri: movie.poster[2]}}
+      />
+      <View style={styles.cardContent}>
+        <View style={styles.movieInfo}>
+          <Text style={styles.cardName} numberOfLines={2} ellipsizeMode="tail">
+            {movie.title}
           </Text>
-          <View style={styles.ratingYearContainer}>
-            <View style={{flexDirection: 'row', gap: 3}}>
-              <Text style={styles.cardDescription}>Rating:</Text>
-              <View style={styles.rating}>
-                <Text style={styles.ratingText}>
-                  {convertRating(movie.rating || 0)}
-                </Text>
-              </View>
+        </View>
+        <Text style={styles.cardGenres} numberOfLines={1} ellipsizeMode="tail">
+          {movie.genres.join(' | ')}
+        </Text>
+        <View style={styles.ratingYearContainer}>
+          <View style={{flexDirection: 'row', gap: 3}}>
+            <Text style={styles.cardDescription}>Rating:</Text>
+            <View style={styles.rating}>
+              <Text style={styles.ratingText}>
+                {convertRating(movie.rating || 0)}
+              </Text>
             </View>
-
-            <Text style={styles.cardDescription}>
-              Year: {movie.releaseDate}
-            </Text>
           </View>
+
+          <Text style={styles.cardDescription}>Year: {movie.releaseDate}</Text>
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 
@@ -91,8 +84,10 @@ const styles = StyleSheet.create({
     transitionProperty: 'transform',
     transitionDuration: 300,
   },
-  cardPressed: {
-    transform: [{scale: 1.01}],
+  cardFocused: {
+    transform: [{scale: 1.03}],
+    borderColor: palette.accentColor,
+    borderWidth: 1,
   },
   cardImage: {
     aspectRatio: constants.ASPECT_RATIO,

@@ -28,7 +28,6 @@ import {useOrientation} from '../hooks';
 import {AppStackParamList} from '../navigation/types';
 import {Loader} from './ui';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useNavigationState} from '@react-navigation/native';
 
 type MoviePropsType = {
   movieId: string;
@@ -37,8 +36,8 @@ type MoviePropsType = {
 
 const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
   const {isPortrait, width, height} = useOrientation();
-  const routes = useNavigationState(state => state.routes);
-  const prevRoute = routes[0].name;
+
+  const prevRoute = navigation.getState().routes[0].name;
 
   // const queryClient = useQueryClient();
   const {searchParameters, setSearchParameters, user} = useStore(

@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
+import {StyleSheet, Text, View, Alert} from 'react-native';
 
 import Octicons from 'react-native-vector-icons/Octicons';
 import {AxiosError} from 'axios';

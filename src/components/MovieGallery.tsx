@@ -5,7 +5,7 @@ import {movieRequests, libraryRequests} from '../API';
 import {UseLibraryQueryType} from '../hooks/useLibraryQuery';
 import MovieCard from './MovieCard';
 import {Movie} from '../types';
-// import ActionSection from './ActionSection';
+import ActionSection from './ActionSection';
 import {commonStyles, palette} from '../styles';
 import {useOrientation} from '../hooks';
 import {Pagination, Loader} from './ui';
@@ -20,6 +20,7 @@ const renderMovieCard = ({item}: {item: Movie}) => <MovieCard movie={item} />;
 const MovieGallery: FC<GalleryPropType> = ({movieHandler, fetchData}) => {
   const {isPortrait, width, height} = useOrientation();
   const [numCols] = useState(5);
+  const [isFilterOpen, setIsFilterOpen] = useState(true);
 
   const {
     data,
@@ -40,7 +41,9 @@ const MovieGallery: FC<GalleryPropType> = ({movieHandler, fetchData}) => {
   return (
     <View style={styles.gallery}>
       <FlatList
-        // ListHeaderComponent={<ActionSection />}
+        ListHeaderComponent={
+          isFilterOpen ? <ActionSection /> : <Text>FILTERS</Text>
+        }
         ListFooterComponent={
           currentPage && totalPages && totalPages > 1 ? (
             <Pagination

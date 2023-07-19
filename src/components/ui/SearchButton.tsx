@@ -30,7 +30,7 @@ const SearchButton: FC<ButtonProps> = ({onPress}) => {
       <Ionicons
         name="search"
         size={24}
-        color={palette.whiteColor}
+        color={palette.blackColor}
         style={buttonStyle}
       />
     </TouchableWithoutFeedback>

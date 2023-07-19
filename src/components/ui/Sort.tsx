@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {View, TouchableOpacity, StyleSheet, Text} from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
-// import {Picker} from '@react-native-picker/picker';
+import {Picker} from '@react-native-picker/picker';
 import {palette} from '../../styles';
 
 type SortPropsType = {
@@ -21,11 +21,11 @@ type SortStateType = {
 };
 
 const Sort: FC<SortPropsType> = ({data, handleChange, sortState}) => {
-  // const handleSortChange = (newSortValue: string) => {
-  //   const newSort = {order: '1', sort: newSortValue};
+  const handleSortChange = (newSortValue: string) => {
+    const newSort = {order: '1', sort: newSortValue};
 
-  //   handleChange(newSort);
-  // };
+    handleChange(newSort);
+  };
 
   const handleOrderChange = () => {
     const newOrder = sortState.order === '1' ? '-1' : '1';
@@ -35,8 +35,7 @@ const Sort: FC<SortPropsType> = ({data, handleChange, sortState}) => {
 
   return (
     <View style={styles.container}>
-      <Text>PICKER</Text>
-      {/* <Picker
+      <Picker
         selectedValue={sortState.sort}
         onValueChange={handleSortChange}
         mode="dropdown"
@@ -52,7 +51,7 @@ const Sort: FC<SortPropsType> = ({data, handleChange, sortState}) => {
             />
           );
         })}
-      </Picker> */}
+      </Picker>
 
       <TouchableOpacity onPress={handleOrderChange}>
         <Octicons

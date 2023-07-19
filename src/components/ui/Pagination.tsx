@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Octicons';
 import {usePagination, DOTS, useOrientation} from '../../hooks';
 import {palette} from '../../styles';
@@ -36,46 +36,51 @@ const Pagination: FC<PaginationProps> = ({
 
   const shouldShowArrow = width > 350;
 
+  const createButtonStyle = (item: string | number) => {
+    const commonStyle = {...styles.paginationButton};
+    const activeStyle = currentPage == item ? styles.activeButton : {};
+
+    return {...commonStyle, ...activeStyle};
+  };
+
   return (
     <View style={styles.pagination} accessibilityLabel="pagination">
       {currentPage > 1 && shouldShowArrow && (
-        <TouchableOpacity
+        <Focused
+          style={styles.paginationButton}
           accessibilityLabel="previous"
-          onPress={() => paginate(currentPage - 1)}>
+          handlePress={() => paginate(currentPage - 1)}>
           <Icon name="arrow-left" size={20} color={palette.whiteColor} />
-        </TouchableOpacity>
+        </Focused>
       )}
 
       {paginationRange &&
         paginationRange.map((item, index) => {
           if (item === DOTS) {
             return (
-              <TouchableOpacity key={index}>
+              <Focused key={index} style={styles.paginationButton}>
                 <Text style={styles.text}>&#8230;</Text>
-              </TouchableOpacity>
+              </Focused>
             );
           }
           return (
-            <TouchableOpacity
+            <Focused
               accessibilityLabel={`page ${item}`}
               key={index}
-              onPress={() => changePage(Number(item))}
-              style={[
-                styles.paginationButton,
-                currentPage === item && styles.activeButton,
-              ]}>
+              handlePress={() => changePage(Number(item))}
+              style={createButtonStyle(item)}>
               <Text style={styles.text}>{item}</Text>
-            </TouchableOpacity>
+            </Focused>
           );
         })}
 
       {currentPage !== total && shouldShowArrow && (
-        <TouchableOpacity
+        <Focused
           accessibilityLabel="next"
-          onPress={() => paginate(currentPage + 1)}
+          handlePress={() => paginate(currentPage + 1)}
           style={styles.paginationButton}>
           <Icon name="arrow-right" size={20} color={palette.whiteColor} />
-        </TouchableOpacity>
+        </Focused>
       )}
     </View>
   );
@@ -94,6 +99,9 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'transparent',
   },
   activeButton: {
     backgroundColor: palette.accentColor,

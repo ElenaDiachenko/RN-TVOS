@@ -1,17 +1,12 @@
 import React, {FC} from 'react';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Alert,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Alert} from 'react-native';
 
 import Octicons from 'react-native-vector-icons/Octicons';
 import {AxiosError} from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import {useQueryClient, useQuery, useMutation} from '@tanstack/react-query';
+import {StackNavigationProp} from '@react-navigation/stack';
+import FastImage from 'react-native-fast-image';
 import {shallow} from 'zustand/shallow';
 import {useStore} from '../stores/store';
 import {
@@ -26,8 +21,7 @@ import {Movie, MovieDataType} from '../types';
 import {commonStyles, palette} from '../styles';
 import {useOrientation} from '../hooks';
 import {AppStackParamList} from '../navigation/types';
-import {Loader} from './ui';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {Focused, Loader} from './ui';
 
 type MoviePropsType = {
   movieId: string;
@@ -120,52 +114,15 @@ const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
       {movie && (
         <View style={isPortrait ? styles.container : styles.containerRow}>
           <View style={[styles.posterBox, posterBoxStyle]}>
-            <Image
+            <FastImage
               style={[styles.infoImage, {aspectRatio: constants.ASPECT_RATIO}]}
               resizeMode="cover"
               source={{uri: movie.poster[2]}}
-              alt={movie.title}
             />
             <LinearGradient
               colors={['transparent', 'rgba(0, 0, 0, 0.6)']}
-              style={styles.gradient}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Video', {
-                    uri: movie.videos[0],
-                  })
-                }
-                style={{...styles.iconBox, left: 10}}>
-                <Octicons
-                  name="play"
-                  size={isPortrait ? 60 : 40}
-                  color={palette.whiteColor}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                // onPress={() => toggleMovie(movie)}
-                style={{
-                  ...styles.iconBox,
-                  ...(isPortrait
-                    ? styles.iconBoxCentered
-                    : styles.iconBoxCenteredLand),
-                  right: 10,
-                }}>
-                {prevRoute === 'Home' ? (
-                  <Octicons
-                    name="heart"
-                    size={isPortrait ? 26 : 20}
-                    color={palette.whiteColor}
-                  />
-                ) : (
-                  <Octicons
-                    name="heart-fill"
-                    size={isPortrait ? 26 : 20}
-                    color={palette.whiteColor}
-                  />
-                )}
-              </TouchableOpacity>
-            </LinearGradient>
+              style={styles.gradient}
+            />
           </View>
           <View style={infoContainerStyle}>
             <View style={styles.item}>
@@ -208,6 +165,48 @@ const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
               <Text style={[styles.content, {lineHeight: 20}]}>
                 {movie.desc}
               </Text>
+            </View>
+            <View style={styles.buttonBox}>
+              <Focused
+                style={styles.button}
+                handlePress={() =>
+                  navigation.navigate('Video', {
+                    uri: movie.videos[0],
+                  })
+                }>
+                <Octicons
+                  name="play"
+                  size={isPortrait ? 60 : 40}
+                  color={palette.whiteColor}
+                />
+                <Text style={commonStyles.text}>WATCH</Text>
+              </Focused>
+              <Focused
+                style={styles.button}
+                // handlePress={() => toggleMovie(movie)}
+              >
+                <View
+                  style={{
+                    ...(isPortrait
+                      ? styles.iconBoxCentered
+                      : styles.iconBoxCenteredLand),
+                  }}>
+                  {prevRoute === 'Home' ? (
+                    <Octicons
+                      name="heart"
+                      size={isPortrait ? 26 : 20}
+                      color={palette.whiteColor}
+                    />
+                  ) : (
+                    <Octicons
+                      name="heart-fill"
+                      size={isPortrait ? 26 : 20}
+                      color={palette.whiteColor}
+                    />
+                  )}
+                </View>
+                <Text style={commonStyles.text}>SAVE</Text>
+              </Focused>
             </View>
           </View>
         </View>
@@ -267,11 +266,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: palette.accentColor,
   },
-
-  iconBox: {
-    position: 'absolute',
-    bottom: 10,
+  buttonBox: {flexDirection: 'row', justifyContent: 'space-around'},
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    paddingHorizontal: 24,
+    paddingVertical: 4,
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: palette.whiteColor,
   },
+
   iconBoxCentered: {
     borderWidth: 5.5,
     borderColor: palette.whiteColor,

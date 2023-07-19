@@ -1,8 +1,9 @@
 import React, {FC} from 'react';
 import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
+import Icon from 'react-native-vector-icons/Octicons';
 import {usePagination, DOTS, useOrientation} from '../../hooks';
 import {palette} from '../../styles';
-import Icon from 'react-native-vector-icons/Octicons';
+import {Focused} from '../ui';
 
 type PaginationProps = {
   total: number;

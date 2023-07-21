@@ -1,8 +1,9 @@
-import {Text, TouchableOpacity} from 'react-native';
+import {Text} from 'react-native';
 import React, {FC, memo} from 'react';
 import {constants} from '../../utils';
 import {palette} from '../../styles';
 import {useOrientation} from '../../hooks';
+import Focused from './Focused';
 
 type GenreType = (typeof constants.genreList)[number];
 
@@ -23,9 +24,11 @@ const GenreItem: FC<RenderItemType> = ({item, pressedGenre, handleChange}) => {
   ];
 
   return (
-    <TouchableOpacity onPress={() => handleChange(item.value)}>
+    <Focused
+      handlePress={() => handleChange(item.value)}
+      style={{borderColor: 'red', borderWidth: 1}}>
       <Text style={textStyle}>{item.value}</Text>
-    </TouchableOpacity>
+    </Focused>
   );
 };
 

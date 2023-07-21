@@ -23,6 +23,7 @@ export const commonStyles = StyleSheet.create({
   text: {
     color: palette.whiteColor,
   },
+  borderInit: {borderColor: 'transparent', borderWidth: 1, borderRadius: 5},
 });
 
 export const ScreenWidth = Dimensions.get('screen').width;

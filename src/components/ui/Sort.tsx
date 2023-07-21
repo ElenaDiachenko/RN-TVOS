@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {View, TouchableOpacity, StyleSheet, Text} from 'react-native';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
 import {Picker} from '@react-native-picker/picker';
 import {palette} from '../../styles';

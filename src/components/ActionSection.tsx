@@ -1,18 +1,17 @@
 import React, {useState, FC, useEffect} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, StyleSheet, TVFocusGuideView} from 'react-native';
 import {shallow} from 'zustand/shallow';
 import {useStore} from '../stores/store';
-import {GenreList} from './ui';
+import {CustomHeader, Focused, GenreList} from './ui';
 import Search from './Search';
-import {commonStyles} from '../styles';
+import {commonStyles, palette} from '../styles';
 import Sort from './ui/Sort';
 import {constants} from '../utils';
 import {useNavigation} from '@react-navigation/native';
 import {AppStackScreenProps} from '../navigation/types';
+import Feather from 'react-native-vector-icons/Feather';
 
-type ActionSectionProps = {
-  // prevRoute: string;
-};
+type ActionSectionProps = {};
 const initialQuery = {
   keyword: '',
   genre: '',
@@ -22,6 +21,7 @@ export type InitialQueryType = typeof initialQuery;
 const ActionSection: FC<ActionSectionProps> = () => {
   const navigation = useNavigation<AppStackScreenProps<'Home'>['navigation']>();
   const [query, setQuery] = useState(initialQuery);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const {
     searchParameters,
@@ -39,6 +39,10 @@ const ActionSection: FC<ActionSectionProps> = () => {
   );
 
   const prevRoute = navigation.getState().routes[0].name;
+  const handleFilters = () => {
+    setIsFilterOpen(prev => !prev);
+  };
+
   const handleSearch = (searchQuery: string) => {
     const evalGenre = searchQuery === 'all genres' ? '' : searchQuery;
     if (prevRoute === 'Home') {
@@ -48,6 +52,7 @@ const ActionSection: FC<ActionSectionProps> = () => {
         page: 1,
       };
       setSearchParameters(updatedSearchParams);
+      handleFilters();
     } else {
       const updatedSearchParams = {
         ...librarySearchParameters,
@@ -55,6 +60,7 @@ const ActionSection: FC<ActionSectionProps> = () => {
         page: 1,
       };
       setLibrarySearchParameters(updatedSearchParams);
+      handleFilters();
     }
   };
 
@@ -66,6 +72,7 @@ const ActionSection: FC<ActionSectionProps> = () => {
   const handleSort = (newSortState: typeof sortState) => {
     const updatedSearchParams = {...searchParameters, ...newSortState, page: 1};
     setSearchParameters(updatedSearchParams);
+    handleFilters();
   };
 
   useEffect(() => {
@@ -88,25 +95,42 @@ const ActionSection: FC<ActionSectionProps> = () => {
   }, [librarySearchParameters, searchParameters, prevRoute]);
 
   return (
-    <View style={styles.container}>
-      <GenreList query={query.genre} handleChange={handleSearch} />
-      <View style={styles.innerContainer}>
-        <Search
-          handleChange={handleSearch}
-          setMessage={setErrorMessage}
-          query={query.keyword}
-        />
-        {prevRoute === 'Home' ? (
-          <Sort
-            data={constants.sortList}
-            sortState={sortState}
-            handleChange={handleSort}
-          />
-        ) : null}
-      </View>
+    <TVFocusGuideView
+      style={[styles.container, !isFilterOpen && styles.containerRow]}>
+      <Focused
+        handlePress={handleFilters}
+        style={{...commonStyles.borderInit, padding: 10}}>
+        <Feather name="menu" size={26} color={palette.whiteColor} />
+      </Focused>
+      {isFilterOpen ? (
+        <>
+          <TVFocusGuideView
+            style={{width: '100%', backgroundColor: 'red'}}
+            autoFocus>
+            <GenreList query={query.genre} handleChange={handleSearch} />
+          </TVFocusGuideView>
 
-      <Text style={{...commonStyles.text}}>{errorMessage}</Text>
-    </View>
+          <TVFocusGuideView style={styles.innerContainer} autoFocus>
+            <Search
+              handleChange={handleSearch}
+              setMessage={setErrorMessage}
+              query={query.keyword}
+            />
+            {prevRoute === 'Home' ? (
+              <Sort
+                data={constants.sortList}
+                sortState={sortState}
+                handleChange={handleSort}
+              />
+            ) : null}
+          </TVFocusGuideView>
+
+          <Text style={{...commonStyles.text}}>{errorMessage}</Text>
+        </>
+      ) : (
+        <CustomHeader />
+      )}
+    </TVFocusGuideView>
   );
 };
 
@@ -118,9 +142,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: 'column',
     gap: 10,
+    width: '100%',
+    backgroundColor: 'blue',
   },
-  innerContainer: {
+  containerRow: {
+    marginTop: 10,
+    paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    backgroundColor: 'blue',
+  },
+  innerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
   },
 });

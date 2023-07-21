@@ -1,9 +1,9 @@
 import React, {FC} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {Text, StyleSheet, TVFocusGuideView} from 'react-native';
 import Icon from 'react-native-vector-icons/Octicons';
 import {usePagination, DOTS, useOrientation} from '../../hooks';
 import {palette} from '../../styles';
-import {Focused} from '../ui';
+import Focused from '../ui/Focused';
 
 type PaginationProps = {
   total: number;
@@ -38,13 +38,13 @@ const Pagination: FC<PaginationProps> = ({
 
   const createButtonStyle = (item: string | number) => {
     const commonStyle = {...styles.paginationButton};
-    const activeStyle = currentPage == item ? styles.activeButton : {};
+    const activeStyle = currentPage === item ? styles.activeButton : {};
 
     return {...commonStyle, ...activeStyle};
   };
 
   return (
-    <View style={styles.pagination} accessibilityLabel="pagination">
+    <TVFocusGuideView style={styles.pagination} accessibilityLabel="pagination">
       {currentPage > 1 && shouldShowArrow && (
         <Focused
           style={styles.paginationButton}
@@ -58,17 +58,21 @@ const Pagination: FC<PaginationProps> = ({
         paginationRange.map((item, index) => {
           if (item === DOTS) {
             return (
-              <Focused key={index} style={styles.paginationButton}>
+              <Focused
+                key={index}
+                style={styles.paginationButton}
+                focusedStyle={styles.activeButton}>
                 <Text style={styles.text}>&#8230;</Text>
               </Focused>
             );
           }
           return (
             <Focused
-              accessibilityLabel={`page ${item}`}
               key={index}
-              handlePress={() => changePage(Number(item))}
-              style={createButtonStyle(item)}>
+              style={createButtonStyle(item)}
+              focusedStyle={styles.activeButton}
+              accessibilityLabel={`page ${item}`}
+              handlePress={() => changePage(Number(item))}>
               <Text style={styles.text}>{item}</Text>
             </Focused>
           );
@@ -82,7 +86,7 @@ const Pagination: FC<PaginationProps> = ({
           <Icon name="arrow-right" size={20} color={palette.whiteColor} />
         </Focused>
       )}
-    </View>
+    </TVFocusGuideView>
   );
 };
 
@@ -106,6 +110,9 @@ const styles = StyleSheet.create({
   activeButton: {
     backgroundColor: palette.accentColor,
     borderRadius: 5,
+  },
+  focusedButton: {
+    borderColor: palette.accentColor,
   },
   text: {
     fontSize: 16,

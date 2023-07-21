@@ -1,9 +1,7 @@
 import React, {FC, Dispatch, SetStateAction, useState, useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
-// import Input from './ui/Input';
-import {SearchButton} from './ui';
-
-import {Focused, Input} from './ui';
+import {StyleSheet, Keyboard} from 'react-native';
+import {AuthInput} from './ui';
+// import {Focused, Input} from './ui';
 
 type SearchPropsType = {
   handleChange: (newQuery: string) => void;
@@ -17,6 +15,7 @@ const Search: FC<SearchPropsType> = ({
   query: initialQuery,
 }) => {
   const [query, setQuery] = useState(initialQuery);
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
 
   const handleChangeInput = (newQuery: string) => {
     setQuery(newQuery.trim());
@@ -28,27 +27,60 @@ const Search: FC<SearchPropsType> = ({
     }
   };
 
-  const handleSubmit = () => {
-    if (query === '') {
-      return setMessage('Enter the title in the search field.');
-    }
-    setMessage('');
-    handleChange(query);
+  // const handleSubmit = () => {
+  //   if (query === '') {
+  //     return setMessage('Enter the title in the search field.');
+  //   }
+  //   setMessage('');
+  //   handleChange(query);
+  // };
+
+  const handleKeyboardDidShow = () => {
+    setIsKeyboardOpen(true);
+  };
+
+  const handleKeyboardDidHide = () => {
+    setIsKeyboardOpen(false);
   };
 
   useEffect(() => {
     setQuery(initialQuery);
+
+    // Add event listeners for keyboard show/hide events
+    Keyboard.addListener('keyboardDidShow', handleKeyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', handleKeyboardDidHide);
+
+    // Clean up the event listeners when the component unmounts
+    return () => {
+      Keyboard.removeAllListeners('keyboardDidShow');
+      Keyboard.removeAllListeners('keyboardDidHide');
+    };
   }, [initialQuery]);
 
+  useEffect(() => {
+    // Check if the keyboard is hidden
+    if (!isKeyboardOpen && query !== initialQuery) {
+      const handleSubmit = () => {
+        if (query === '') {
+          return setMessage('Enter the title in the search field.');
+        }
+        setMessage('');
+        handleChange(query);
+      };
+
+      handleSubmit();
+    }
+  }, [handleChange, initialQuery, isKeyboardOpen, query, setMessage]);
+
   return (
-    <Focused style={styles.container}>
-      <Input
+    <>
+      <AuthInput
         placeholder={'Search movie...'}
         value={query}
-        setValue={handleChangeInput}
+        onChangeText={handleChangeInput}
       />
-      <SearchButton onPress={handleSubmit} />
-    </Focused>
+      {/* Optionally, you can add the SearchButton here if you want it to be shown while the keyboard is open */}
+    </>
   );
 };
 

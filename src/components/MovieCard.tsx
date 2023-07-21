@@ -1,5 +1,5 @@
-import React, {useState, FC, memo} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {FC, memo} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {constants, convertRating, calculateCardWidth} from '../utils';
@@ -7,6 +7,7 @@ import {Movie} from '../types';
 import {palette} from '../styles';
 import {useOrientation} from '../hooks';
 import {AppStackScreenProps} from '../navigation/types';
+import {Focused} from './ui';
 
 type MovieCardProps = {
   movie: Movie;
@@ -15,25 +16,14 @@ type MovieCardProps = {
 const MovieCard: FC<MovieCardProps> = ({movie}) => {
   const navigation = useNavigation<AppStackScreenProps<'Home'>['navigation']>();
   const {width, isPortrait} = useOrientation();
-  const [focus, setFocus] = useState(false);
-
-  const handleFocus = () => {
-    setFocus(true);
-  };
-
-  const handleBlur = () => {
-    setFocus(false);
-  };
 
   const cardWidth: number = calculateCardWidth(isPortrait, width);
 
   return (
-    <TouchableOpacity
-      style={[styles.card, {width: cardWidth}, focus && styles.cardFocused]}
-      onPress={() => navigation.navigate('Details', {movieId: movie._id})}
-      activeOpacity={1}
-      onFocus={handleFocus}
-      onBlur={handleBlur}>
+    <Focused
+      style={{...styles.card, width: cardWidth}}
+      focusedStyle={styles.cardFocused}
+      handlePress={() => navigation.navigate('Details', {movieId: movie._id})}>
       <FastImage
         style={styles.cardImage}
         resizeMode="cover"
@@ -61,7 +51,7 @@ const MovieCard: FC<MovieCardProps> = ({movie}) => {
           <Text style={styles.cardDescription}>Year: {movie.releaseDate}</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </Focused>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, {FC, useState} from 'react';
-import {FlatList, StyleSheet, Text, View, TVFocusGuideView} from 'react-native';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {UseMovieQueryType} from '../hooks/useMovieQuery';
 import {movieRequests, libraryRequests} from '../API';
 import {UseLibraryQueryType} from '../hooks/useLibraryQuery';
@@ -20,7 +20,6 @@ const renderMovieCard = ({item}: {item: Movie}) => <MovieCard movie={item} />;
 const MovieGallery: FC<GalleryPropType> = ({movieHandler, fetchData}) => {
   const {isPortrait, width, height} = useOrientation();
   const [numCols] = useState(5);
-  const [isFilterOpen, setIsFilterOpen] = useState(true);
 
   const {
     data,
@@ -41,9 +40,7 @@ const MovieGallery: FC<GalleryPropType> = ({movieHandler, fetchData}) => {
   return (
     <View style={styles.gallery}>
       <FlatList
-        ListHeaderComponent={
-          isFilterOpen ? <ActionSection /> : <Text>FILTERS</Text>
-        }
+        ListHeaderComponent={<ActionSection />}
         ListFooterComponent={
           currentPage && totalPages && totalPages > 1 ? (
             <Pagination

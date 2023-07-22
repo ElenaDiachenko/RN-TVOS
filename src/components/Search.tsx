@@ -1,6 +1,6 @@
 import React, {FC, Dispatch, SetStateAction, useState, useEffect} from 'react';
-import {StyleSheet, Keyboard} from 'react-native';
-import {AuthInput} from './ui';
+import {StyleSheet, Keyboard, View} from 'react-native';
+import {AuthInput, SearchButton} from './ui';
 // import {Focused, Input} from './ui';
 
 type SearchPropsType = {
@@ -16,7 +16,7 @@ const Search: FC<SearchPropsType> = ({
 }) => {
   const [query, setQuery] = useState(initialQuery);
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-
+  const [isFocused, setIsFocused] = useState(false);
   const handleChangeInput = (newQuery: string) => {
     setQuery(newQuery.trim());
 
@@ -26,14 +26,6 @@ const Search: FC<SearchPropsType> = ({
       setMessage('');
     }
   };
-
-  // const handleSubmit = () => {
-  //   if (query === '') {
-  //     return setMessage('Enter the title in the search field.');
-  //   }
-  //   setMessage('');
-  //   handleChange(query);
-  // };
 
   const handleKeyboardDidShow = () => {
     setIsKeyboardOpen(true);
@@ -46,11 +38,9 @@ const Search: FC<SearchPropsType> = ({
   useEffect(() => {
     setQuery(initialQuery);
 
-    // Add event listeners for keyboard show/hide events
     Keyboard.addListener('keyboardDidShow', handleKeyboardDidShow);
     Keyboard.addListener('keyboardDidHide', handleKeyboardDidHide);
 
-    // Clean up the event listeners when the component unmounts
     return () => {
       Keyboard.removeAllListeners('keyboardDidShow');
       Keyboard.removeAllListeners('keyboardDidHide');
@@ -58,7 +48,6 @@ const Search: FC<SearchPropsType> = ({
   }, [initialQuery]);
 
   useEffect(() => {
-    // Check if the keyboard is hidden
     if (!isKeyboardOpen && query !== initialQuery) {
       const handleSubmit = () => {
         if (query === '') {
@@ -73,14 +62,17 @@ const Search: FC<SearchPropsType> = ({
   }, [handleChange, initialQuery, isKeyboardOpen, query, setMessage]);
 
   return (
-    <>
-      <AuthInput
-        placeholder={'Search movie...'}
-        value={query}
-        onChangeText={handleChangeInput}
-      />
-      {/* Optionally, you can add the SearchButton here if you want it to be shown while the keyboard is open */}
-    </>
+    <View style={styles.container}>
+      <View style={styles.innerContainer}>
+        <AuthInput
+          placeholder={'Search movie...'}
+          value={query}
+          onChangeText={handleChangeInput}
+          setInputFocused={setIsFocused}
+        />
+        <SearchButton isFocused={isFocused} />
+      </View>
+    </View>
   );
 };
 
@@ -88,7 +80,12 @@ export default Search;
 
 const styles = StyleSheet.create({
   container: {
+    width: '80%',
+    backgroundColor: 'yellow',
+  },
+  innerContainer: {
     position: 'relative',
-    width: '30%',
+    maxWidth: 450,
+    backgroundColor: 'green',
   },
 });

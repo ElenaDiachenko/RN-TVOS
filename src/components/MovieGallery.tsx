@@ -15,7 +15,9 @@ type GalleryPropType = {
   fetchData: movieRequests.FetchMoviesType | libraryRequests.FetchMoviesType;
 };
 
-const renderMovieCard = ({item}: {item: Movie}) => <MovieCard movie={item} />;
+const renderMovieCard = ({item, index}: {item: Movie; index: number}) => (
+  <MovieCard movie={item} index={index} />
+);
 
 const MovieGallery: FC<GalleryPropType> = ({movieHandler, fetchData}) => {
   const {isPortrait, width, height} = useOrientation();
@@ -56,7 +58,7 @@ const MovieGallery: FC<GalleryPropType> = ({movieHandler, fetchData}) => {
         }
         key={numCols}
         data={movieData}
-        renderItem={({item}) => renderMovieCard({item})}
+        renderItem={({item, index}) => renderMovieCard({item, index})}
         keyExtractor={item => item._id}
         numColumns={numCols}
         ListEmptyComponent={

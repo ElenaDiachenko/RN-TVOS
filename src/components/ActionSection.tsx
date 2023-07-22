@@ -39,6 +39,7 @@ const ActionSection: FC<ActionSectionProps> = () => {
   );
 
   const prevRoute = navigation.getState().routes[0].name;
+
   const handleFilters = () => {
     setIsFilterOpen(prev => !prev);
   };
@@ -96,17 +97,21 @@ const ActionSection: FC<ActionSectionProps> = () => {
 
   return (
     <TVFocusGuideView
-      style={[styles.container, !isFilterOpen && styles.containerRow]}>
+      style={[!isFilterOpen ? styles.containerRow : styles.container]}
+      autoFocus>
       <Focused
         handlePress={handleFilters}
-        style={{...commonStyles.borderInit, padding: 10}}>
-        <Feather name="menu" size={26} color={palette.whiteColor} />
+        style={{...commonStyles.borderInit, ...styles.menu}}>
+        <Feather
+          name="menu"
+          size={26}
+          color={!isFilterOpen ? palette.accentColor : palette.whiteColor}
+        />
       </Focused>
+
       {isFilterOpen ? (
         <>
-          <TVFocusGuideView
-            style={{width: '100%', backgroundColor: 'red'}}
-            autoFocus>
+          <TVFocusGuideView style={{width: '100%'}} autoFocus>
             <GenreList query={query.genre} handleChange={handleSearch} />
           </TVFocusGuideView>
 
@@ -152,13 +157,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    backgroundColor: 'blue',
+    // backgroundColor: 'blue',
   },
   innerContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '100%',
+  },
+  menu: {
+    padding: 10,
+    width: 45,
+    height: 45,
+    alignContent: 'center',
   },
 });

@@ -77,8 +77,10 @@ export default memo(GenreList);
 const styles = StyleSheet.create({
   separator: {
     width: 1,
+    height: '60%',
+    alignSelf: 'center',
     backgroundColor: palette.footerTextColor,
-    marginHorizontal: 16,
+    marginHorizontal: 10,
   },
   item: {
     width: 90,

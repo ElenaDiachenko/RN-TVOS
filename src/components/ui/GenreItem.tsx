@@ -25,8 +25,10 @@ const GenreItem: FC<RenderItemType> = ({item, pressedGenre, handleChange}) => {
 
   return (
     <Focused
+      hasTVPreferredFocus={isPressed}
       handlePress={() => handleChange(item.value)}
-      style={{borderColor: 'red', borderWidth: 1}}>
+      focusedStyle={{borderBottomColor: palette.accentColor}}
+      style={{borderBottomColor: 'transparent', borderBottomWidth: 2}}>
       <Text style={textStyle}>{item.value}</Text>
     </Focused>
   );

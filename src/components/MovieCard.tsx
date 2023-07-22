@@ -9,11 +9,12 @@ import {useOrientation} from '../hooks';
 import {AppStackScreenProps} from '../navigation/types';
 import {Focused} from './ui';
 
-type MovieCardProps = {
+export type MovieCardProps = {
   movie: Movie;
+  index: number;
 };
 
-const MovieCard: FC<MovieCardProps> = ({movie}) => {
+const MovieCard: FC<MovieCardProps> = ({movie, index}) => {
   const navigation = useNavigation<AppStackScreenProps<'Home'>['navigation']>();
   const {width, isPortrait} = useOrientation();
 
@@ -21,6 +22,7 @@ const MovieCard: FC<MovieCardProps> = ({movie}) => {
 
   return (
     <Focused
+      hasTVPreferredFocus={index === 0}
       style={{...styles.card, width: cardWidth}}
       focusedStyle={styles.cardFocused}
       handlePress={() => navigation.navigate('Details', {movieId: movie._id})}>

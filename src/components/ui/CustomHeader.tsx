@@ -20,12 +20,9 @@ const CustomHeader = () => {
   );
 
   const handleFocus = () => {
-    // Access the focusedElementRef.current to get the focused element
-
     if (focusedElementRef.current) {
-      // Do something with the focused element
       focusedElementRef.current.setNativeProps({
-        style: {backgroundColor: 'red'}, // For example, change the background color
+        style: {backgroundColor: 'red'},
       });
     }
   };

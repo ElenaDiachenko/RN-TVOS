@@ -5,6 +5,7 @@ import {palette} from '../../styles';
 type InputProps = {
   placeholder: string;
   secureTextEntry?: boolean;
+  setInputFocused?: React.Dispatch<React.SetStateAction<boolean>>;
   value: string;
   onChangeText: (text: string) => void;
   error?: string;
@@ -13,6 +14,7 @@ const AuthInput: FC<InputProps> = ({
   placeholder,
   value,
   onChangeText,
+  setInputFocused,
   secureTextEntry = false,
   error,
 }) => {
@@ -21,10 +23,12 @@ const AuthInput: FC<InputProps> = ({
 
   const handleFocus = () => {
     setIsFocused(true);
+    setInputFocused(true);
   };
 
   const handleBlur = () => {
     setIsFocused(false);
+    setInputFocused(false);
   };
 
   return (
@@ -57,7 +61,7 @@ export default AuthInput;
 
 const styles = StyleSheet.create({
   inputBox: {
-    width: '90%',
+    width: '100%',
     maxWidth: 450,
   },
   input: {

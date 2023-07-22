@@ -1,39 +1,27 @@
-import React, {FC, useState} from 'react';
-import {StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import React, {FC} from 'react';
+import {StyleSheet, ViewProps} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {palette} from '../../styles';
-
+import Focused from './Focused';
 type ButtonProps = {
-  onPress: () => void;
+  props?: ViewProps;
+  isFocused: boolean;
 };
 
-const SearchButton: FC<ButtonProps> = ({onPress}) => {
-  const [isPressed, setIsPressed] = useState(false);
-
-  const handlePressIn = () => {
-    setIsPressed(true);
-  };
-
-  const handlePressOut = () => {
-    setIsPressed(false);
-  };
-
-  const buttonStyle = isPressed
+const SearchButton: FC<ButtonProps> = ({isFocused, ...props}) => {
+  const buttonStyle = isFocused
     ? [styles.button, styles.pressedButton]
     : styles.button;
 
   return (
-    <TouchableWithoutFeedback
-      onPress={onPress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}>
+    <Focused style={styles.button} {...props}>
       <Ionicons
         name="search"
         size={24}
         color={palette.blackColor}
         style={buttonStyle}
       />
-    </TouchableWithoutFeedback>
+    </Focused>
   );
 };
 
@@ -42,8 +30,8 @@ export default SearchButton;
 const styles = StyleSheet.create({
   button: {
     position: 'absolute',
-    right: 0,
-    top: 10,
+    right: 2,
+    top: 5,
   },
   pressedButton: {
     color: palette.accentColor,

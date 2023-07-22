@@ -1,4 +1,4 @@
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useRoute} from '@react-navigation/native';
 
 import React, {memo, ReactNode, useEffect} from 'react';
 import {TVEventControl, TVFocusGuideView, View, ViewStyle} from 'react-native';
@@ -11,15 +11,17 @@ type ScreenProps = {
 
 const ScreenWrapper = ({children, style, contentStyle}: ScreenProps) => {
   const isFocused = useIsFocused();
-
+  const {name: route} = useRoute();
+  console.log(route);
   useEffect(() => {
     if (isFocused) {
-      TVEventControl.enableTVMenuKey();
+      if (route === 'Home') {
+        TVEventControl.disableTVMenuKey();
+      } else {
+        TVEventControl.enableTVMenuKey();
+      }
     }
-    return () => {
-      TVEventControl.disableTVMenuKey();
-    };
-  }, [isFocused]);
+  }, [isFocused, route]);
 
   return (
     <TVFocusGuideView style={style} autoFocus>

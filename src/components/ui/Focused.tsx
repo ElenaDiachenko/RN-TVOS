@@ -65,7 +65,7 @@ type FocusedType = {
   style?: ViewStyle;
   focusedStyle?: ViewStyle;
   handlePress?: () => void;
-  ref?: Ref<TouchableOpacity>; // Use React.Ref<TouchableOpacity> for the ref property
+  ref?: Ref<TouchableOpacity>;
 };
 
 const Focused: FC<FocusedType & ViewProps> = forwardRef(

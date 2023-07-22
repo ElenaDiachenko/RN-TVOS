@@ -69,6 +69,7 @@ const Pagination: FC<PaginationProps> = ({
           return (
             <Focused
               key={index}
+              hasTVPreferredFocus={item == currentPage}
               style={createButtonStyle(item)}
               focusedStyle={styles.activeButton}
               accessibilityLabel={`page ${item}`}

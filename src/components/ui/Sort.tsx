@@ -1,8 +1,9 @@
-import React, {FC} from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import React, {FC, useRef} from 'react';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
-import {Picker} from '@react-native-picker/picker';
 import {palette} from '../../styles';
+import Picker from './Picker';
+import Focused from './Focused';
 
 type SortPropsType = {
   data: DataType[];
@@ -21,9 +22,10 @@ type SortStateType = {
 };
 
 const Sort: FC<SortPropsType> = ({data, handleChange, sortState}) => {
+  const orderRef = useRef<TouchableOpacity | null>(null);
+
   const handleSortChange = (newSortValue: string) => {
     const newSort = {order: '1', sort: newSortValue};
-
     handleChange(newSort);
   };
 
@@ -36,31 +38,20 @@ const Sort: FC<SortPropsType> = ({data, handleChange, sortState}) => {
   return (
     <View style={styles.container}>
       <Picker
-        selectedValue={sortState.sort}
+        value={sortState.sort}
         onValueChange={handleSortChange}
-        mode="dropdown"
-        style={styles.picker}
-        dropdownIconColor={palette.whiteColor}>
-        {data.map(item => {
-          return (
-            <Picker.Item
-              key={item.value}
-              value={item.value}
-              label={item.label}
-              style={styles.pickerItem}
-            />
-          );
-        })}
-      </Picker>
+        data={data}
+        dropdownIconColor={palette.whiteColor}
+      />
 
-      <TouchableOpacity onPress={handleOrderChange}>
+      <Focused handlePress={handleOrderChange} ref={orderRef}>
         <Octicons
           name="arrow-switch"
           size={24}
-          color={palette.accentColor}
+          color={palette.whiteColor}
           style={styles.arrowIcon}
         />
-      </TouchableOpacity>
+      </Focused>
     </View>
   );
 };
@@ -73,17 +64,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  picker: {
-    height: 30,
-    width: 130,
-    backgroundColor: 'transparent',
-    color: palette.whiteColor,
-  },
-  pickerItem: {
-    fontSize: 16,
-    backgroundColor: palette.mainBgColor,
-    color: palette.whiteColor,
-  },
   arrowIcon: {
     transform: [{rotate: '90deg'}],
   },

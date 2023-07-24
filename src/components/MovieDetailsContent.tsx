@@ -25,6 +25,7 @@ const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
 
   const isHomeScreen =
     getState().routes[getState().routes.length - 2]?.name === 'Home';
+
   const {toggleMovie} = useMovie({isHomeScreen, goBack});
 
   const {data: movie, isLoading} = useQuery(['movies', movieId], () =>

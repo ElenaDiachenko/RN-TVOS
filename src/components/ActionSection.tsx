@@ -7,7 +7,7 @@ import Search from './Search';
 import {commonStyles, palette} from '../styles';
 import Sort from './ui/Sort';
 import {constants} from '../utils';
-import {useNavigation} from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 import {AppStackScreenProps} from '../navigation/types';
 import Feather from 'react-native-vector-icons/Feather';
 import {useFocusState} from '../hooks';
@@ -21,7 +21,8 @@ export type InitialQueryType = typeof initialQuery;
 
 const ActionSection: FC<ActionSectionProps> = () => {
   const [isFocusedMenu, handleFocusChangeMenu] = useFocusState();
-  const navigation = useNavigation<AppStackScreenProps<'Home'>['navigation']>();
+
+  const {name: route} = useRoute<AppStackScreenProps<'Home'>['route']>();
   const [query, setQuery] = useState(initialQuery);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -40,15 +41,13 @@ const ActionSection: FC<ActionSectionProps> = () => {
     shallow,
   );
 
-  const prevRoute = navigation.getState().routes[0].name;
-
   const handleFilters = () => {
     setIsFilterOpen(prev => !prev);
   };
 
   const handleSearch = (searchQuery: string) => {
     const evalGenre = searchQuery === 'all genres' ? '' : searchQuery;
-    if (prevRoute === 'Home') {
+    if (route === 'Home') {
       const updatedSearchParams = {
         ...searchParameters,
         query: evalGenre,
@@ -84,7 +83,7 @@ const ActionSection: FC<ActionSectionProps> = () => {
     }
 
     const queryValue =
-      prevRoute === 'Home'
+      route === 'Home'
         ? searchParameters?.query || ''
         : librarySearchParameters?.query || '';
 
@@ -95,7 +94,7 @@ const ActionSection: FC<ActionSectionProps> = () => {
     };
 
     setQuery(updatedQuery);
-  }, [librarySearchParameters, searchParameters, prevRoute]);
+  }, [librarySearchParameters, searchParameters, route]);
 
   return (
     <TVFocusGuideView
@@ -125,7 +124,7 @@ const ActionSection: FC<ActionSectionProps> = () => {
               setMessage={setErrorMessage}
               query={query.keyword}
             />
-            {prevRoute === 'Home' ? (
+            {route === 'Home' ? (
               <Sort
                 data={constants.sortList}
                 sortState={sortState}
@@ -152,7 +151,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 10,
     width: '100%',
-    // backgroundColor: 'blue',
   },
   containerRow: {
     marginTop: 10,
@@ -161,7 +159,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    // backgroundColor: 'blue',
   },
   innerContainer: {
     flex: 1,

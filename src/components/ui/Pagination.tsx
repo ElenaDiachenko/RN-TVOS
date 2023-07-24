@@ -69,7 +69,7 @@ const Pagination: FC<PaginationProps> = ({
           return (
             <Focused
               key={index}
-              hasTVPreferredFocus={item == currentPage}
+              hasTVPreferredFocus={+item === currentPage}
               style={createButtonStyle(item)}
               focusedStyle={styles.activeButton}
               accessibilityLabel={`page ${item}`}
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 5,
+    width: '100%',
   },
   paginationButton: {
     minWidth: 40,

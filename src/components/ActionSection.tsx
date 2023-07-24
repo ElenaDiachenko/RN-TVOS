@@ -10,6 +10,7 @@ import {constants} from '../utils';
 import {useNavigation} from '@react-navigation/native';
 import {AppStackScreenProps} from '../navigation/types';
 import Feather from 'react-native-vector-icons/Feather';
+import {useFocusState} from '../hooks';
 
 type ActionSectionProps = {};
 const initialQuery = {
@@ -19,6 +20,7 @@ const initialQuery = {
 export type InitialQueryType = typeof initialQuery;
 
 const ActionSection: FC<ActionSectionProps> = () => {
+  const [isFocusedMenu, handleFocusChangeMenu] = useFocusState();
   const navigation = useNavigation<AppStackScreenProps<'Home'>['navigation']>();
   const [query, setQuery] = useState(initialQuery);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -101,11 +103,13 @@ const ActionSection: FC<ActionSectionProps> = () => {
       autoFocus>
       <Focused
         handlePress={handleFilters}
-        style={{...commonStyles.borderInit, ...styles.menu}}>
+        style={{...styles.menu}}
+        onFocus={() => handleFocusChangeMenu(true)}
+        onBlur={() => handleFocusChangeMenu(false)}>
         <Feather
           name="menu"
           size={26}
-          color={!isFilterOpen ? palette.accentColor : palette.whiteColor}
+          color={isFocusedMenu ? palette.accentColor : palette.whiteColor}
         />
       </Focused>
 

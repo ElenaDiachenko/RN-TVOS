@@ -1,9 +1,10 @@
-import React, {FC, useRef} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {FC} from 'react';
+import {View, StyleSheet} from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
 import {palette} from '../../styles';
 import Picker from './Picker';
 import Focused from './Focused';
+import {useFocusState} from '../../hooks';
 
 type SortPropsType = {
   data: DataType[];
@@ -22,8 +23,7 @@ type SortStateType = {
 };
 
 const Sort: FC<SortPropsType> = ({data, handleChange, sortState}) => {
-  const orderRef = useRef<TouchableOpacity | null>(null);
-
+  const [isFocusedOrder, handleFocusChangeOrder] = useFocusState();
   const handleSortChange = (newSortValue: string) => {
     const newSort = {order: '1', sort: newSortValue};
     handleChange(newSort);
@@ -44,11 +44,14 @@ const Sort: FC<SortPropsType> = ({data, handleChange, sortState}) => {
         dropdownIconColor={palette.whiteColor}
       />
 
-      <Focused handlePress={handleOrderChange} ref={orderRef}>
+      <Focused
+        handlePress={handleOrderChange}
+        onFocus={() => handleFocusChangeOrder(true)}
+        onBlur={() => handleFocusChangeOrder(false)}>
         <Octicons
           name="arrow-switch"
           size={24}
-          color={palette.whiteColor}
+          color={isFocusedOrder ? palette.accentColor : palette.whiteColor}
           style={styles.arrowIcon}
         />
       </Focused>

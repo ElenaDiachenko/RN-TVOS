@@ -90,9 +90,4 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 10,
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)', // Adjust the opacity as needed
-    zIndex: 1, // Set a higher zIndex to make it appear on top of other content
-  },
 });

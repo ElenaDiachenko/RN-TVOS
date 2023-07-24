@@ -23,12 +23,12 @@ const AuthInput: FC<InputProps> = ({
 
   const handleFocus = () => {
     setIsFocused(true);
-    setInputFocused(true);
+    setInputFocused?.(true);
   };
 
   const handleBlur = () => {
     setIsFocused(false);
-    setInputFocused(false);
+    setInputFocused?.(false);
   };
 
   return (

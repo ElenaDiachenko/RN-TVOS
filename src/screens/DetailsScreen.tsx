@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {AppStackScreenProps} from '../navigation/types';
 import {MovieDetailsContent, ScreenWrapper} from '../components';
@@ -10,13 +10,9 @@ const DetailsScreen = () => {
   const navigation =
     useNavigation<AppStackScreenProps<'Details'>['navigation']>();
   const {movieId} = route.params;
-  const uri = 'URL';
+
   return (
     <ScreenWrapper style={styles.container}>
-      <Text>DetailsScreen - Movie ID: {movieId}</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('Video', {uri})}>
-        <Text>Video</Text>
-      </TouchableOpacity>
       <MovieDetailsContent movieId={movieId} navigation={navigation} />
     </ScreenWrapper>
   );

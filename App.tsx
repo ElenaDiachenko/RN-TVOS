@@ -10,7 +10,8 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
 function App(): JSX.Element {
   const [lastEventType, setLastEventType] = React.useState('');
-  const queryClient = new QueryClient();
+
+  const [queryClient] = useState(() => new QueryClient());
   enableScreens(true);
   const [initializing, setInitializing] = useState(true);
   const {checkUser} = useStore(

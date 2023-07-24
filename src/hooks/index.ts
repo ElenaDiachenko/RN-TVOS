@@ -4,6 +4,7 @@ import {usePagination, DOTS} from './usePagination';
 import {useOrientation} from './useOrientation';
 import {usePlayer} from './usePlayer';
 import {useFocusState} from './useFocusState';
+import {useMovie} from './useMovie';
 
 export {
   useMovieQuery,
@@ -13,4 +14,5 @@ export {
   usePlayer,
   useOrientation,
   useFocusState,
+  useMovie,
 };

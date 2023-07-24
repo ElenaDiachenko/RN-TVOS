@@ -25,10 +25,10 @@ const CustomHeader = () => {
   return (
     <View style={styles.container}>
       <Focused
-        handlePress={() => {}}
+        // handlePress={() => {}}
         onFocus={() => handleFocusChangeLibrary(true)}
         onBlur={() => handleFocusChangeLibrary(false)}
-        // handlePress={() => navigation.navigate('Library')}
+        handlePress={() => navigation.navigate('Library')}
         style={{...styles.logoutBtn}}>
         <Text
           style={{
@@ -38,7 +38,7 @@ const CustomHeader = () => {
         </Text>
       </Focused>
       <Focused
-        onPress={() => logoutUser()}
+        handlePress={() => logoutUser()}
         onFocus={() => handleFocusChangeLogout(true)}
         onBlur={() => handleFocusChangeLogout(false)}>
         <Feather

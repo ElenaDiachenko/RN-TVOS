@@ -1,25 +1,16 @@
 import React, {FC} from 'react';
-import {StyleSheet, Text, View, Alert} from 'react-native';
-
+import {StyleSheet, Text, View} from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
-import {AxiosError} from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
-import {useQueryClient, useQuery, useMutation} from '@tanstack/react-query';
+import {useQuery} from '@tanstack/react-query';
 import {StackNavigationProp} from '@react-navigation/stack';
 import FastImage from 'react-native-fast-image';
-import {shallow} from 'zustand/shallow';
-import {useStore} from '../stores/store';
-import {
-  getSerializedSearchParameters,
-  convertRating,
-  convertTime,
-  constants,
-} from '../utils';
-import {movieRequests, libraryRequests} from '../API';
 
-import {Movie, MovieDataType} from '../types';
+import {convertRating, convertTime, constants} from '../utils';
+import {movieRequests} from '../API';
+
 import {commonStyles, palette} from '../styles';
-import {useOrientation} from '../hooks';
+import {useMovie, useOrientation} from '../hooks';
 import {AppStackParamList} from '../navigation/types';
 import {Focused, Loader} from './ui';
 
@@ -30,72 +21,15 @@ type MoviePropsType = {
 
 const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
   const {isPortrait, width, height} = useOrientation();
+  const {navigate, getState, goBack} = navigation;
 
-  const prevRoute = navigation.getState().routes[0].name;
+  const isHomeScreen =
+    getState().routes[getState().routes.length - 2]?.name === 'Home';
+  const {toggleMovie} = useMovie({isHomeScreen, goBack});
 
-  // const queryClient = useQueryClient();
-  const {searchParameters, setSearchParameters, user} = useStore(
-    state => ({
-      searchParameters: state.librarySearchParameters,
-      setSearchParameters: state.setLibrarySearchParameters,
-      user: state.authUser,
-    }),
-    shallow,
-  );
-
-  const serializedSearchParameters =
-    getSerializedSearchParameters(searchParameters);
   const {data: movie, isLoading} = useQuery(['movies', movieId], () =>
     movieRequests.fetchMovieById(movieId),
   );
-
-  // const addMovieMutation = useMutation(libraryRequests.addMovie, {
-  //   onSuccess: async () => {
-  //     await queryClient.invalidateQueries(['library']);
-  //     Alert.alert('The movie has been saved successfully');
-  //   },
-  //   onError: error => {
-  //     if (error instanceof AxiosError) {
-  //       if (error?.response?.status === 403) {
-  //         Alert.alert(error?.response?.data?.message);
-  //       }
-  //       return;
-  //     }
-  //     Alert.alert('Something went wrong.Try again later');
-  //   },
-  // });
-
-  // const deleteMovieMutation = useMutation(libraryRequests.deleteMovie, {
-  //   onSuccess: async () => {
-  //     await queryClient.invalidateQueries(['library']);
-  //     Alert.alert('The movie has been deleted successfully');
-  //     const libraryQueryData = queryClient.getQueryData<MovieDataType>([
-  //       'library',
-  //       serializedSearchParameters,
-  //     ]);
-  //     if (
-  //       libraryQueryData &&
-  //       libraryQueryData.currentPage != 1 &&
-  //       libraryQueryData.data.length === 0
-  //     ) {
-  //       const updatedSearchParams = {
-  //         ...searchParameters,
-  //         page: +libraryQueryData.currentPage - 1,
-  //       };
-  //       setSearchParameters(updatedSearchParams);
-  //     }
-  //     navigation.goBack();
-  //   },
-  //   onError: () => {
-  //     Alert.alert('Something went wrong. Try again later');
-  //   },
-  // });
-
-  // const toggleMovie = (movie: Movie) => {
-  //   prevRoute === 'Home'
-  //     ? addMovieMutation.mutate(movie._id)
-  //     : deleteMovieMutation.mutate(movie._id);
-  // };
 
   const posterBoxStyle = {
     width: isPortrait ? '100%' : undefined,
@@ -168,9 +102,11 @@ const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
             </View>
             <View style={styles.buttonBox}>
               <Focused
+                hasTVPreferredFocus
                 style={styles.button}
+                focusedStyle={styles.buttonFocused}
                 handlePress={() =>
-                  navigation.navigate('Video', {
+                  navigate('Video', {
                     uri: movie.videos[0],
                   })
                 }>
@@ -183,15 +119,15 @@ const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
               </Focused>
               <Focused
                 style={styles.button}
-                // handlePress={() => toggleMovie(movie)}
-              >
+                focusedStyle={styles.buttonFocused}
+                handlePress={() => toggleMovie(movie)}>
                 <View
                   style={{
                     ...(isPortrait
                       ? styles.iconBoxCentered
                       : styles.iconBoxCenteredLand),
                   }}>
-                  {prevRoute === 'Home' ? (
+                  {isHomeScreen ? (
                     <Octicons
                       name="heart"
                       size={isPortrait ? 26 : 20}
@@ -205,7 +141,9 @@ const MovieDetailsContent: FC<MoviePropsType> = ({movieId, navigation}) => {
                     />
                   )}
                 </View>
-                <Text style={commonStyles.text}>SAVE</Text>
+                <Text style={commonStyles.text}>
+                  {isHomeScreen ? 'SAVE' : 'REMOVE'}
+                </Text>
               </Focused>
             </View>
           </View>
@@ -277,7 +215,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: palette.whiteColor,
   },
-
+  buttonFocused: {
+    backgroundColor: palette.accentColor,
+    borderColor: palette.accentColor,
+  },
   iconBoxCentered: {
     borderWidth: 5.5,
     borderColor: palette.whiteColor,

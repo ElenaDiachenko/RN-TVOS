@@ -34,6 +34,7 @@ const CustomHeader = () => {
         <Text
           style={{
             color: isFocusedLibrary ? palette.accentColor : palette.whiteColor,
+            fontSize: 18,
           }}>
           {route === 'Home' ? 'Library' : 'Home'}
         </Text>

@@ -2,14 +2,14 @@ import 'react-native-gesture-handler';
 import React, {useEffect, useState} from 'react';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {shallow} from 'zustand/shallow';
-import {useTVEventHandler} from 'react-native';
+// import {useTVEventHandler} from 'react-native';
 import {enableScreens} from 'react-native-screens';
 import {useStore} from './src/stores/store';
 import Navigation from './src/navigation';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
 function App(): JSX.Element {
-  const [lastEventType, setLastEventType] = React.useState('');
+  // const [lastEventType, setLastEventType] = React.useState('');
 
   const [queryClient] = useState(() => new QueryClient());
   enableScreens(true);
@@ -32,12 +32,12 @@ function App(): JSX.Element {
     })();
   }, [checkUser]);
 
-  const myTVEventHandler = (evt: {eventType: React.SetStateAction<string>}) => {
-    setLastEventType(evt.eventType);
-    console.log(evt, 'EVENT');
-  };
-  console.log(lastEventType);
-  useTVEventHandler(myTVEventHandler);
+  // const myTVEventHandler = (evt: {eventType: React.SetStateAction<string>}) => {
+  //   setLastEventType(evt.eventType);
+  //   console.log(evt, 'EVENT');
+  // };
+  // console.log(lastEventType);
+  // useTVEventHandler(myTVEventHandler);
 
   if (initializing) {
     return <></>;

@@ -81,11 +81,9 @@ export default Search;
 const styles = StyleSheet.create({
   container: {
     width: '80%',
-    backgroundColor: 'yellow',
   },
   innerContainer: {
     position: 'relative',
     maxWidth: 450,
-    backgroundColor: 'green',
   },
 });
